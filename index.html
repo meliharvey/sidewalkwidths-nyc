@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Sidewalk Widths NYC</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+
+<style>
+	body {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+	#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+		background-color: #03070d;
+  }
+  #info {
+    position: fixed;
+    width: 80%;
+    max-width: 400px;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    color: #a6c1d2;
+    background-color: #0b0d13;
+    z-index: 1000;
+    border-radius: 20px;
+  }
+  #info-content {
+    width: 100%;
+    height: 80%;
+    overflow: auto;
+    font-size: 1em;
+  }
+  #info-content h1 {
+    margin-top: 0;
+  }
+  #info-content h3 {
+    margin-bottom: 0;
+  }
+  #info-content p {
+    width: 100%;
+    overflow: auto;
+  }
+  #info-button {
+    height: 50px;
+    padding: 1em;
+    text-align: center;
+  }
+  #info-button button {
+    padding: 0.5em;
+    color: #cfedff;
+    font-size: 1.25em;
+    font-weight: bold;
+    background-color: #1b3e6f;
+    outline: 0;
+    border: 0;
+    border-radius: 10px;
+  }
+  #info-button button:hover {
+    background-color: #a99521;
+    transition: 0.1s ease-in-out;
+  }
+  #open-info {
+    position: fixed;
+    background-color: #1b3e6f;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    outline: 0;
+    border: 0;
+    border-radius: 20px;
+    z-index: 2000;
+  }
+  #open-info h2 {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    color: #cfedff;
+    margin-top: 8px;
+  }
+  #open-info:hover {
+    background-color: #a99521;
+    transition: 0.1s ease-in-out;
+  }
+	a:link {
+		color: #3d77ca;
+		text-decoration: none;
+	}
+	a:visited {
+		color: #3d77ca;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #a99521;
+	  text-decoration: underline;
+	}
+	a:active {
+		color: #a99521;
+	  text-decoration: underline;
+	}
+	.mapboxgl-ctrl-group {
+    background: #1b3e6f;
+	}
+	.mapboxgl-ctrl-group button+button {
+    border-top: 1px solid #000;
+	}
+	.mapboxgl-ctrl button:not(:disabled):hover {
+    background-color: #a99521;
+		transition: 0.1s ease-in-out;
+	}
+	.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='29' height='29' viewBox='0 0 29 29' xmlns='http://www.w3.org/2000/svg' fill='white'%3E%3Cpath d='M14.5 8.5c-.75 0-1.5.75-1.5 1.5v3h-3c-.75 0-1.5.75-1.5 1.5S9.25 16 10 16h3v3c0 .75.75 1.5 1.5 1.5S16 19.75 16 19v-3h3c.75 0 1.5-.75 1.5-1.5S19.75 13 19 13h-3v-3c0-.75-.75-1.5-1.5-1.5z'/%3E%3C/svg%3E");
+	}
+	.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='29' height='29' viewBox='0 0 29 29' xmlns='http://www.w3.org/2000/svg' fill='white'%3E%3Cpath d='M10 13c-.75 0-1.5.75-1.5 1.5S9.25 16 10 16h9c.75 0 1.5-.75 1.5-1.5S19.75 13 19 13h-9z'/%3E%3C/svg%3E");
+	}
+	.mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='29' height='29' viewBox='0 0 29 29' xmlns='http://www.w3.org/2000/svg' fill='white'%3E%3Cpath d='M10.5 14l4-8 4 8h-8z'/%3E%3Cpath d='M10.5 16l4 8 4-8h-8z' fill='black'/%3E%3C/svg%3E");
+	}
+  .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+    border-top-color: #03070d;
+  }
+  .mapboxgl-popup-content {
+    color: white;
+    font-weight: bold;
+    background-color: #03070d;
+    border: 1px solid white;
+    border-radius: 10px;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, .8);
+  }
+  .mapboxgl-popup-content .name {
+    margin: 0;
+    margin-bottom: 0.5em;
+  }
+  .mapboxgl-popup-content .width {
+    margin: 0;
+    margin-bottom: 0.2em;
+    font-size: 2.5em;
+  }
+  .mapboxgl-popup-content .message {
+    margin: 0;
+    margin-bottom: 0.2em;
+    font-size: 1.5em;
+  }
+
+</style>
+</head>
+<body>
+
+  <div id="info">
+    <div id="info-content">
+      <h3>Welcome to</h3>
+      <h1>Sidewalk Widths NYC</h1>
+      <p>This map is intended to give an impression of how sidewalk widths impact the ability of pedestrians to practice social distancing. Widths were determined from <a href="https://data.cityofnewyork.us/City-Government/Sidewalk/vfx9-tbb6">New York City's Sidewalk dataset</a> which was not verfied for accuracy or completeness.</p>
+			<p>To learn more about how this dataset was produced, visit the <a href="https://www.github.com/meliharvey/sidewalkwidths-nyc">GitHub page</a>.</p>
+      <p><small>DISCLAIMER<br>
+      Do not use this map to make decisions that impact your health or safety. Other important factors like sidewalk obstructions and pedestrian activity are not accounted for in this dataset.</small></p>
+    </div>
+    <div id="info-button" onclick="closeInfo()">
+      <button>Explore the Map</button>
+    </div>
+  </div>
+
+  <button id="open-info" onclick="openInfo()">
+    <h2>i</h2>
+  </button>
+
+  <div id="map"></div>
+
+  <script>
+
+  function closeInfo() {
+    var x = document.getElementById("info");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+
+  function openInfo() {
+    var x = document.getElementById("info");
+    if (x.style.display === "block") {
+      x.style.display = "none";
+    } else {
+      x.style.display = "block";
+    }
+  }
+
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2s5N3Zjc3ZxMGYwazNlbm9ubzA1d3Q1dCJ9.szxUl4AKCdUNLlmvham6og';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/dcharvey/ck90r78ib0hnp1jnz9bwleg7h',
+    center: [-74.005, 40.714],
+    zoom: 13,
+  	maxZoom: 22,
+  	minZoom: 13,
+		maxBounds: [
+			[-74.33, 40.41], // Southwest coordinates
+			[-73.63, 40.98] // Northeast coordinates
+		]
+  });
+
+	map.addControl(new mapboxgl.NavigationControl());
+
+  map.on('load', function() {
+    // Insert the layer beneath any symbol layer.
+    var layers = map.getStyle().layers;
+
+    var labelLayerId;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        labelLayerId = layers[i].id;
+        break;
+      }
+    }
+
+		// map.addSource('sidewalks', {
+		//    type: 'geojson',
+		//    data: './sidewalkwidths_nyc.geojson'
+		// });
+
+		map.addSource('sidewalks', {
+			 type: 'vector',
+			 url: 'mapbox://dcharvey.1typxzdb'
+		});
+
+    map.addLayer({
+      'id': 'sidewalks',
+      'type': 'line',
+      'source': 'sidewalks',
+			'source-layer': 'sidewalkwidths_nyc-87ugfr',
+      'layout': {
+        'line-cap': 'round',
+      },
+      'paint': {
+        'line-width': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          14, 1,
+          19, 10,
+        ],
+        'line-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'width'],
+          0, '#d7191c',
+          6, '#d7191c',
+          12, '#bab849',
+          18, '#03fc7b',
+          24, '#03a1fc'
+        ],
+        'line-opacity': 1,
+      },
+    },
+    labelLayerId
+    );
+
+    map.addLayer(
+      {
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+        'fill-extrusion-color': '#141c26',
+        'fill-extrusion-height': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15, 0,
+          15.05, ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15, 0,
+          15.05, ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15, 0,
+          16, 0.95
+        ]
+      }
+    },
+    labelLayerId
+    );
+
+    var popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
+
+    function addPopup(e) {
+
+      map.getCanvas().style.cursor = 'pointer';
+
+      var lineWidth = e.features[0].properties.width
+      var lineColor = e.features[0].layer.paint['line-color']
+      var coordinates = e.lngLat;
+
+      if (lineWidth < 8) {
+        var message = 'This path is too narrow for social distancing.'
+        var lineColor = '#d7191c'
+      } else if (lineWidth >= 8 && lineWidth < 10) {
+        var message = 'This path is too narrow for social distancing.'
+        var lineColor = '#de873c'
+			} else if (lineWidth >= 10 && lineWidth < 12) {
+        var message = 'Social distancing may be difficult on this path.'
+        var lineColor = '#bab849'
+      } else if (lineWidth >= 12 && lineWidth < 14) {
+        var message = 'Social distancing may be difficult on this path.'
+        var lineColor = '#a7ed2d'
+			} else if (lineWidth >= 14 && lineWidth < 16) {
+				var message = 'Social distancing should be possible on this path.'
+				var lineColor = '#65c334'
+			} else if (lineWidth >= 16 && lineWidth < 18) {
+				var message = 'Social distancing should be possible on this path.'
+				var lineColor = '#34e059'
+			} else if (lineWidth >= 18 && lineWidth < 20) {
+				var message = 'Social distancing should be easy on this path.'
+				var lineColor = '#03fc72'
+			} else if (lineWidth >= 22 && lineWidth < 24) {
+				var message = 'Social distancing should be easy on this path.'
+				var lineColor = '#03fcda'
+      } else {
+        var message = 'This path is great for social distancing!'
+        var lineColor = '#03a1fc'
+      }
+
+      var description = (
+        '<div class="name">Sidewalk Width:</div>' +
+        '<div class="width">' + Math.round(lineWidth * 10) / 10) + ' ft</div>' +
+        '<div class="message">' + message + '</div>'
+
+      popup.setLngLat(coordinates)
+      popup.setHTML(description)
+      popup.addTo(map)
+
+      popup._content.style.color = lineColor
+      popup._content.style.borderColor = lineColor
+      popup._tip.style.borderTopColor = lineColor
+      popup._tip.style.borderBottomColor = lineColor
+
+      popup.addTo(map)
+    }
+
+    map.on('touchstart', 'sidewalks', function(e) {
+      addPopup(e);
+    })
+
+    map.on('mousemove', 'sidewalks', function(e) {
+      addPopup(e);
+    });
+
+    map.on('mouseleave', 'sidewalks', function() {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+    });
+
+  });
+
+  </script>
+
+</body>
+</html>
