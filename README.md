@@ -9,8 +9,11 @@ This repo contains the notebooks to reproduce this work, as well as the finished
 
 ## Methodology
 
-1) Dissolved touching sidewalk polygons
-![Sidewalk Polygon](assets/sidewalks_polygon.png)
+1) Polygons from NYC open data
+![Sidewalk Polygons](assets/sidewalk_polygons.png)
+
+1) Dissolve adjacent sidewalk polygons
+![Sidewalk Polygons Dissolved](assets/sidewalk_polygons_dissolved.png)
 
 2) Find sidewalk centerlines
 ![Centerlines](assets/centerline.png)

@@ -197,7 +197,7 @@
     }
   }
 
-	mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2s5N3Zjc3ZxMGYwazNlbm9ubzA1d3Q1dCJ9.szxUl4AKCdUNLlmvham6og';
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2ltemVpNjY1MDRlanVya2szYzlnM2dxcyJ9.im9EDlP7YIYefEt_wz2fww';
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/dcharvey/ck90r78ib0hnp1jnz9bwleg7h',
@@ -357,8 +357,19 @@
 
       popup._content.style.color = lineColor
       popup._content.style.borderColor = lineColor
-      popup._tip.style.borderTopColor = lineColor
-      popup._tip.style.borderBottomColor = lineColor
+
+			if (popup._tip.offsetParent.className.includes('mapboxgl-popup-anchor-bottom')) {
+				popup._tip.style.borderTopColor = lineColor
+			}
+			if (popup._tip.offsetParent.className.includes('mapboxgl-popup-anchor-top')) {
+	      popup._tip.style.borderBottomColor = lineColor
+			}
+			if (popup._tip.offsetParent.className.includes('mapboxgl-popup-anchor-right')) {
+				popup._tip.style.borderLeftColor = lineColor
+			}
+			if (popup._tip.offsetParent.className.includes('mapboxgl-popup-anchor-left')) {
+				popup._tip.style.borderRightColor = lineColor
+			}
 
       popup.addTo(map)
     }
