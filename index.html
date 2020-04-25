@@ -167,12 +167,12 @@
       <p><small>DISCLAIMER<br>
       Do not use this map to make decisions that impact your health or safety. Other important factors like sidewalk obstructions and pedestrian activity are not accounted for in this dataset.</small></p>
     </div>
-    <div id="info-button" onclick="closeInfo()">
+    <div id="info-button" onclick="toggleInfo()">
       <button>Explore the Map</button>
     </div>
   </div>
 
-  <button id="open-info" onclick="openInfo()">
+  <button id="open-info" onclick="toggleInfo()">
     <h2>i</h2>
   </button>
 
@@ -180,16 +180,7 @@
 
   <script>
 
-  function closeInfo() {
-    var x = document.getElementById("info");
-    if (x.style.display === "none") {
-      x.style.display = "block";
-    } else {
-      x.style.display = "none";
-    }
-  }
-
-  function openInfo() {
+  function toggleInfo() {
     var x = document.getElementById("info");
     if (x.style.display === "block") {
       x.style.display = "none";
@@ -339,7 +330,7 @@
 			} else if (lineWidth >= 18 && lineWidth < 20) {
 				var message = 'Social distancing should be easy on this path.'
 				var lineColor = '#03fc72'
-			} else if (lineWidth >= 22 && lineWidth < 24) {
+			} else if (lineWidth >= 20 && lineWidth < 22) {
 				var message = 'Social distancing should be easy on this path.'
 				var lineColor = '#03fcda'
       } else {
