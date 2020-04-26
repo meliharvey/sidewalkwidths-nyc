@@ -21,7 +21,7 @@
     width: 100%;
 		background-color: #03070d;
   }
-  #info {
+  .window {
     position: fixed;
     width: 80%;
     max-width: 400px;
@@ -35,64 +35,61 @@
     z-index: 1000;
     border-radius: 20px;
   }
-  #info-content {
+  .window-content {
     width: 100%;
     height: 80%;
     overflow: auto;
     font-size: 1em;
   }
-  #info-content h1 {
+  .window-content h1 {
     margin-top: 0;
   }
-  #info-content h3 {
+  .window-content h3 {
     margin-bottom: 0;
   }
-  #info-content p {
-    width: 100%;
+  .window-content p {
     overflow: auto;
   }
-  #info-button {
+  .close-window {
     height: 50px;
     padding: 1em;
     text-align: center;
   }
-  #info-button button {
+  .close-window button {
     padding: 0.5em;
-    color: #cfedff;
     font-size: 1.25em;
-    font-weight: bold;
-    background-color: #1b3e6f;
-    outline: 0;
-    border: 0;
     border-radius: 10px;
   }
-  #info-button button:hover {
-    background-color: #a99521;
+	button {
+		color: #cfedff;
+		font-weight: bold;
+		background-color: #1b3e6f;
+		outline: 0;
+    border: 0;
+	}
+	button:hover {
+		background-color: #D0BD33;
     transition: 0.1s ease-in-out;
-  }
-  #open-info {
-    position: fixed;
-    background-color: #1b3e6f;
+	}
+	button h2 {
+		margin-top: 8px;
+	}
+	#menu {
+		position: fixed;
+		margin: 0;
+		padding: 0;
+		z-index: 2000;
+	}
+	.circle-button {
     margin-left: 10px;
     margin-top: 10px;
+		padding: 8px;
     width: 40px;
     height: 40px;
     text-align: center;
-    outline: 0;
-    border: 0;
+		font-family: "Times New Roman", Times, serif;
     border-radius: 20px;
-    z-index: 2000;
-  }
-  #open-info h2 {
-    font-family: "Times New Roman", Times, serif;
-    font-weight: bold;
-    color: #cfedff;
-    margin-top: 8px;
-  }
-  #open-info:hover {
-    background-color: #a99521;
-    transition: 0.1s ease-in-out;
-  }
+	}
 	a:link {
 		color: #3d77ca;
 		text-decoration: none;
@@ -109,6 +106,27 @@
 		color: #a99521;
 	  text-decoration: underline;
 	}
+	.legend {
+		padding: 0;
+	}
+	.legend li {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	.legend button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 32px;
+		font-weight: bold;
+		background-color: #18232d;
+		border-radius: 16px;
+	}
+	.legend button:hover {
+		background-color: #273a4a;
+		transition: 0.1s ease-in-out;
+	}
 	.mapboxgl-ctrl-group {
     background: #1b3e6f;
 	}
@@ -116,7 +134,7 @@
     border-top: 1px solid #000;
 	}
 	.mapboxgl-ctrl button:not(:disabled):hover {
-    background-color: #a99521;
+    background-color: #d0bd33;
 		transition: 0.1s ease-in-out;
 	}
 	.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
@@ -158,8 +176,18 @@
 </head>
 <body>
 
-  <div id="info">
-    <div id="info-content">
+	<div id="menu">
+		<button id="info-button" class="button circle-button" onclick="toggleInfo()">
+			<img src="./assets/logo.png"></img>
+		</button>
+
+		<button id="legend-button" class="button circle-button" onclick="toggleLegend()">
+			<img src="./assets/legend.png"></img>
+		</button>
+	</div>
+
+  <div id="info" class="window" style="display: block;">
+    <div class="window-content">
       <h3>Welcome to</h3>
       <h1>Sidewalk Widths NYC</h1>
       <p>This map is intended to give an impression of how sidewalk widths impact the ability of pedestrians to practice social distancing. Widths were determined from <a href="https://data.cityofnewyork.us/City-Government/Sidewalk/vfx9-tbb6">New York City's Sidewalk dataset</a> which was not verfied for accuracy or completeness.</p>
@@ -167,14 +195,21 @@
       <p><small>DISCLAIMER<br>
       Do not use this map to make decisions that impact your health or safety. Other important factors like sidewalk obstructions and pedestrian activity are not accounted for in this dataset.</small></p>
     </div>
-    <div id="info-button" onclick="toggleInfo()">
-      <button>Explore the Map</button>
+    <div class="close-window" onclick="toggleInfo()">
+      <button class="button">Explore the Map</button>
     </div>
   </div>
 
-  <button id="open-info" onclick="toggleInfo()">
-    <h2>i</h2>
-  </button>
+	<div id="legend-window" class="window" style="display: none;">
+		<div class="window-content">
+			<h1>Legend</h1>
+			<ul id="legend-main" class="legend">
+			</ul>
+		</div>
+		<div class="close-window" onclick="toggleLegend()">
+			<button class="button">Return to map</button>
+		</div>
+	</div>
 
   <div id="map"></div>
 
@@ -186,10 +221,72 @@
       x.style.display = "none";
     } else {
       x.style.display = "block";
+			document.getElementById("legend-window").style.display = "none";
     }
   }
 
-	mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2s5N3Zjc3ZxMGYwazNlbm9ubzA1d3Q1dCJ9.szxUl4AKCdUNLlmvham6og';
+	function toggleLegend() {
+		var x = document.getElementById("legend-window");
+		if (x.style.display === "block") {
+			x.style.display = "none";
+		} else {
+			x.style.display = "block";
+			document.getElementById("info").style.display = "none";
+		}
+	}
+
+	var groups = [
+		{
+			"value": 0,
+			"rating": "impossible",
+			"color": "#B10044"
+		},
+		{
+			"value": 6,
+			"rating": "very difficult",
+			"color": "#FF0006"
+		},
+		{
+			"value": 10,
+			"rating": "difficult",
+			"color": "#FF9300"
+		},
+		{
+			"value": 14,
+			"rating": "possible",
+			"color": "#00FF2A"
+		},
+		{
+			"value": 18,
+			"rating": "easy",
+			"color": "#00FFC9"
+		},
+		{
+			"value": 22,
+			"rating": "very easy",
+			"color": "#03a1fc"
+		},
+	]
+
+	function addLegendItem(item, index) {
+
+		if (groups[index - 1] == null)
+			range = 'more than ' + item.value + 'ft +'
+		else
+			range = (item.value + 0.1) + ' - ' + groups[index - 1].value + 'ft'
+
+		var row = document.createElement("LI");
+		var button = document.createElement("BUTTON");
+		button.innerHTML = item.rating + ' (' + range + ')';
+		button.setAttribute("style", "border: 1px solid " + item.color + "; color: " + item.color + ";");
+		row.appendChild(button);
+		document.getElementById("legend-main").appendChild(row);
+	}
+
+	groups.reverse().forEach(addLegendItem);
+	groups.reverse()
+
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2ltemVpNjY1MDRlanVya2szYzlnM2dxcyJ9.im9EDlP7YIYefEt_wz2fww';
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/dcharvey/ck90r78ib0hnp1jnz9bwleg7h',
@@ -218,11 +315,6 @@
       }
     }
 
-		// map.addSource('sidewalks', {
-		//    type: 'geojson',
-		//    data: './sidewalkwidths_nyc.geojson'
-		// });
-
 		map.addSource('sidewalks', {
 			 type: 'vector',
 			 url: 'mapbox://dcharvey.1typxzdb'
@@ -245,14 +337,14 @@
           19, 10,
         ],
         'line-color': [
-          'interpolate',
-          ['linear'],
-          ['get', 'width'],
-          0, '#d7191c',
-          6, '#d7191c',
-          12, '#bab849',
-          18, '#03fc7b',
-          24, '#03a1fc'
+					"step",
+					["get", 'width'],
+	        groups[0].color, groups[1].value,
+					groups[1].color, groups[2].value,
+					groups[2].color, groups[3].value,
+					groups[3].color, groups[4].value,
+					groups[4].color, groups[5].value,
+					groups[5].color
         ],
         'line-opacity': 1,
       },
@@ -308,40 +400,26 @@
       var lineWidth = e.features[0].properties.width
       var lineColor = e.features[0].layer.paint['line-color']
       var coordinates = e.lngLat;
+			var stopIndex;
 
-      if (lineWidth < 8) {
-        var message = 'This path is too narrow for social distancing.'
-        var lineColor = '#d7191c'
-      } else if (lineWidth >= 8 && lineWidth < 10) {
-        var message = 'This path is too narrow for social distancing.'
-        var lineColor = '#de873c'
-			} else if (lineWidth >= 10 && lineWidth < 12) {
-        var message = 'Social distancing may be difficult on this path.'
-        var lineColor = '#bab849'
-      } else if (lineWidth >= 12 && lineWidth < 14) {
-        var message = 'Social distancing may be difficult on this path.'
-        var lineColor = '#a7ed2d'
-			} else if (lineWidth >= 14 && lineWidth < 16) {
-				var message = 'Social distancing should be possible on this path.'
-				var lineColor = '#65c334'
-			} else if (lineWidth >= 16 && lineWidth < 18) {
-				var message = 'Social distancing should be possible on this path.'
-				var lineColor = '#34e059'
-			} else if (lineWidth >= 18 && lineWidth < 20) {
-				var message = 'Social distancing should be easy on this path.'
-				var lineColor = '#03fc72'
-			} else if (lineWidth >= 20 && lineWidth < 22) {
-				var message = 'Social distancing should be easy on this path.'
-				var lineColor = '#03fcda'
-      } else {
-        var message = 'This path is great for social distancing!'
-        var lineColor = '#03a1fc'
-      }
+			for (i=0; i < groups.length; i++) {
+				if (groups[i + 1] == null) {
+					if (lineWidth > groups[i].value) {
+						groupIndex = i;
+					}
+				} else {
+					if (lineWidth > groups[i].value && lineWidth <= groups[i + 1].value) {
+						groupIndex = i;
+					}
+				}
+			}
 
-      var description = (
+			lineColor = groups[groupIndex].color
+
+      var description =
         '<div class="name">Sidewalk Width:</div>' +
-        '<div class="width">' + Math.round(lineWidth * 10) / 10) + ' ft</div>' +
-        '<div class="message">' + message + '</div>'
+        '<div class="width">' + (Math.round(lineWidth * 10) / 10) + ' ft</div>' +
+        '<div class="message">Social distancing is ' + groups[groupIndex].rating + ' on this path</div>'
 
       popup.setLngLat(coordinates)
       popup.setHTML(description)
