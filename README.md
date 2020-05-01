@@ -10,27 +10,30 @@ This repo contains the notebooks to reproduce this work, as well as the finished
 ## Methodology
 
 1) Polygons from NYC open data
-![Sidewalk Polygons](assets/sidewalk_polygons.png)
+![Sidewalk Polygons](assets/sidewalk_polygons.png | width=200)
 
 1) Dissolve adjacent sidewalk polygons
-![Sidewalk Polygons Dissolved](assets/sidewalk_polygons_dissolved.png)
+![Sidewalk Polygons Dissolved](assets/sidewalk_polygons_dissolved.png | width=200)
 
 2) Find sidewalk centerlines
-![Centerlines](assets/centerline.png)
+![Centerlines](assets/centerline.png | width=200)
 
 3) Remove short ends and simplify
-![Centerlines Simplified](assets/centerline_simplified.png)
+![Centerlines Simplified](assets/centerline_simplified.png | width=200)
 
 4) Measure distance from centerlines to original polygon
-![Centerlines Widths](assets/centerline_widths.png)
+![Centerlines Widths](assets/centerline_widths.png | width=200)
 
 ## Forking
-
 If you want to make a version of Sidewalk Widths for your own city, just fork this repo and use whatever portion of the code you like. Not all cities will have publicly accessible planimetric sidewalk data, so you may need to produce the sidewalk dataset in a different way (i.e. curbs to parcel boundaries).
+
+The website should work with only a few changes. I've consolidated most of the variables you need to customize in a file called ```settings.js```. It should include things like your Mapbox token, sidewalk width ratings, and units of measurement for you to customize.
 
 ### Mapbox
 Sidewalk widths uses Mapbox for the custom map style and serve the sidewalk widths data as a tileset. If you're creating your own version of the site you must make a Mapbox account and replace the access token with your own. My access token is restricted to the www.sidewalkwidths.nyc URL.
 
-You can copy the [sidewalk widths custom Mapbox style here](https://api.mapbox.com/styles/v1/dcharvey/ck90r78ib0hnp1jnz9bwleg7h.html?fresh=true&title=copy&access_token=pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2s5N3Zjc3ZxMGYwazNlbm9ubzA1d3Q1dCJ9.szxUl4AKCdUNLlmvham6og).
-
+#### Tilesets
 To create a tileset from your sidewalk width GeoJSON, following the [Mapbox documentation here](https://docs.mapbox.com/studio-manual/reference/tilesets/).
+
+#### Custom Style
+You can copy the [sidewalk widths custom Mapbox style here](https://api.mapbox.com/styles/v1/dcharvey/ck90r78ib0hnp1jnz9bwleg7h.html?fresh=true&title=copy&access_token=pk.eyJ1IjoiZGNoYXJ2ZXkiLCJhIjoiY2s5N3Zjc3ZxMGYwazNlbm9ubzA1d3Q1dCJ9.szxUl4AKCdUNLlmvham6og).
