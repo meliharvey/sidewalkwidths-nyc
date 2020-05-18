@@ -20,42 +20,87 @@
 <body>
 
 	<div id="menu">
-		<button id="info-button" class="button circle-button" onclick="toggleInfo()">
+		<button class="btn circle-btn" title="About" onclick="toggleWindow('infoWindow')">
 			<img src="./assets/logo.png"></img>
 		</button>
 
-		<button id="legend-button" class="button circle-button" onclick="toggleLegend()">
+		<button class="btn circle-btn" title="Legend" onclick="toggleWindow('legendWindow')">
 			<img src="./assets/legend.png"></img>
 		</button>
+
+		<button class="btn circle-btn" title="Charts" onclick="toggleWindow('chartsWindow')">
+			<img src="./assets/charts.png"></img>
+		</button>
+
+		<!-- <button class="btn circle-btn" title="District" onclick="toggleWindow('selectWindow')">
+			<img src="./assets/group.png"></img>
+		</button> -->
 	</div>
 
-  <div id="info" class="window" style="display: block;">
-    <div class="window-content">
-      <h3>Welcome to</h3>
-      <h1>Sidewalk Widths NYC</h1>
-      <p>This map is intended to give an impression of how sidewalk widths impact the ability of pedestrians to practice social distancing. Widths were determined from <a href="https://data.cityofnewyork.us/City-Government/Sidewalk/vfx9-tbb6">New York City's Sidewalk dataset</a> which was not verfied for accuracy or completeness.</p>
+	<div id="infoWindow" class="window landing" style="display:block">
+		<img id="landingClose" class="close" src="./assets/close.svg" alt="close" onclick="toggleWindow('infoWindow')" style="display: none;">
+		<div class="content">
+			<h3>Welcome to</h3>
+			<h1>Sidewalk Widths NYC</h1>
+			<p>This map is intended to give an impression of how sidewalk widths impact the ability of pedestrians to practice social distancing. Widths were determined from <a href="https://data.cityofnewyork.us/City-Government/Sidewalk/vfx9-tbb6">New York City's Sidewalk dataset</a> which was not verfied for accuracy or completeness.</p>
 			<p>To learn more about how this dataset was produced, visit the <a href="https://www.github.com/meliharvey/sidewalkwidths-nyc">GitHub page</a>.</p>
-      <p><small>DISCLAIMER<br>
-      Do not use this map to make decisions that impact your health or safety. Other important factors like sidewalk obstructions and pedestrian activity are not accounted for in this dataset.</small></p>
-    </div>
-    <div class="close-window" onclick="toggleInfo()">
-      <button class="button">Explore the Map</button>
-    </div>
-  </div>
+			<p><small>DISCLAIMER<br>
+			Do not use this map to make decisions that impact your health or safety. Other important factors like sidewalk obstructions and pedestrian activity are not accounted for in this dataset.</small></p>
+		</div>
+		<div id="enter" class="footer">
+			<div class="close-btn">
+				<button class="btn" onclick="enterMap()">Explore the Map</button>
+			</div>
+		</div>
+	</div>
 
-	<div id="legend-window" class="window" style="display: none;">
-		<div class="window-content">
-			<h1>Legend</h1>
+	<div id="legendWindow" class="window menu" style="display: none;">
+		<img class="close" src="./assets/close.svg" alt="close" onclick="toggleWindow('legendWindow')">
+		<div class="header">
+				<h2>Legend</h2>
+		</div>
+		<div class="content">
 			<ul id="legend-main" class="legend">
 			</ul>
 		</div>
-		<div class="close-window" onclick="toggleLegend()">
-			<button class="button">Return to map</button>
+	</div>
+
+	<div id="chartsWindow" class="window menu" style="display: none;">
+		<img class="close" src="./assets/close.svg" alt="close" onclick="toggleWindow('chartsWindow')">
+		<div class="header">
+				<h2>Charts</h2>
+		</div>
+		<div class="content">
+			<div class="row align-right">
+				<button id="removeBrush" onclick="removeBrush()" class="btn btn-sm" style="visibility: hidden;">reset selection</button>
+			</div>
+			<div id="chartContainer" class="chart"></div>
+			<div class="dropdown">
+			  <button id="chartDropdownButton" onclick="toggleDropdown()" class="btn dropdown-btn">NYC</button>
+			  <div id="chartDropdown" class="dropdown-content">
+				</div>
+			</div>
 		</div>
 	</div>
 
+	<!-- <div id="selectWindow" class="window menu" style="display: none;">
+		<img class="close" src="./assets/close.svg" alt="close" onclick="toggleWindow('selectWindow')">
+		<div class="header">
+				<h2>Districts</h2>
+		</div>
+		<div class="content">
+			<button id="draw" class="btn" onclick="drawPolygon()">Draw Polygon</button>
+			<button id="delete" class="btn" onclick="drawPolygon()">Delete</button>
+		</div>
+	</div> -->
+
   <div id="map"></div>
 
+
+	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.18.0/mapbox-gl-draw.js'></script>
+	<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css" type="text/css" />
+	<script src="https://d3js.org/d3.v3.min.js"></script>
 	<script src="js/settings.js"></script>
   <script src="js/app.js"></script>
 
