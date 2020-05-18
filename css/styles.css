@@ -11,73 +11,190 @@ body {
   background-color: #03070d;
 }
 .window {
-  position: fixed;
-  width: 80%;
-  max-width: 400px;
-  height: 80%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   padding: 30px;
   color: #a6c1d2;
-  background-color: #0b0d13;
-  z-index: 1000;
+  background-color: #1f2933;
   border-radius: 20px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, .8);
+  z-index: 1000;
 }
-.window-content {
+.window.landing {
+  position: absolute;
+  top: 60px;
+  bottom: 40px;
+  left: 10px;
+  right: 10px;
+}
+.window h1 {
+  margin-top: 0;
+}
+.window h2 {
+  margin: 0;
+}
+.menu h3 {
+  margin: 0;
+}
+.landing h3 {
+  margin-bottom: 0;
+}
+.window .close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+.landing {
+  margin: auto;
+  max-width: 400px;
+}
+.landing .content {
   width: 100%;
   height: 80%;
   overflow: auto;
   font-size: 1em;
 }
-.window-content h1 {
-  margin-top: 0;
-}
-.window-content h3 {
-  margin-bottom: 0;
-}
-.window-content p {
-  overflow: auto;
-}
-.close-window {
-  height: 50px;
-  padding: 1em;
+.landing .footer {
+  display: table;
+  width: 100%;
+  height: 20%;
   text-align: center;
 }
-.close-window button {
+.close-btn {
+  display: table-cell;
+  vertical-align: middle;
+}
+.footer button {
   padding: 0.5em;
   font-size: 1.25em;
-  border-radius: 10px;
+  border-radius: 25px;
 }
-button {
+.window.menu {
+  position: absolute;
+  top: 60px;
+  bottom: 40px;
+  left: 10px;
+  right: 10px;
+  max-width: 300px;
+}
+.window.menu .header {
+  height: 40px;
+}
+.window.menu .content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 70px;
+  bottom: 30px;
+  right: 30px;
+  left: 30px;
+  overflow: auto;
+}
+.row {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.close {
+  fill: white;
+  width: 20px;
+  opacity: 40%;
+  transition: 0.1s ease-in-out;
+}
+.close:hover {
+  opacity: 60%;
+}
+.btn {
   color: #cfedff;
   font-weight: bold;
   background-color: #314561;
   outline: 0;
   border: 0;
+  padding: 10px;
+  border-radius: 10px;
 }
-button:hover {
+.btn:hover {
   background-color: #526886;
   transition: 0.1s ease-in-out;
 }
-button h2 {
+.btn h2 {
   margin-top: 8px;
+}
+.btn-sm {
+  font-weight: normal;
+  padding: 5px;
+  border-radius: 5px;
+}
+.align-right {
+  text-align: right;
 }
 #menu {
   position: fixed;
-  margin: 0;
+  margin-top: 10px;
+  margin-left: 10px;
   padding: 0;
   z-index: 2000;
 }
-.circle-button {
-  margin-left: 10px;
-  margin-top: 10px;
+.circle-btn {
+  margin-right: 5px;
   padding: 8px;
   width: 40px;
   height: 40px;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
   border-radius: 20px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, .8);
+}
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  display: inline-block;
+}
+.dropdown-btn {
+  width: 100%;
+}
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  width: 100%;
+  background-color: #ddd;
+  min-height: 100px;
+  overflow-y: auto;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, .8);
+  border-radius: 10px;
+  z-index: 1;
+}
+/* Links inside the dropdown */
+/* Links inside the dropdown */
+.dropdown-content ul {
+  margin: 0;
+  padding: 0;
+}
+.dropdown-header {
+  margin: 0;
+  padding: 6px 16px;
+  font-weight: bold;
+  color: #848484;
+  background-color: #ccc;
+}
+.dropdown-item {
+  display: block;
+  margin: 0;
+  padding: 12px 16px;
+  color: black;
+  overflow: auto;
+  text-decoration: none;
+}
+/* Change color of dropdown links on hover */
+.dropdown-item:hover {
+  background-color: #a6c1d2;
+}
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+  display:block;
 }
 a:link {
   color: #3d77ca;
@@ -95,6 +212,10 @@ a:active {
   color: #a99521;
   text-decoration: underline;
 }
+.chart {
+  display: relative;
+  width: 100%;
+}
 .legend {
   padding: 0;
 }
@@ -104,7 +225,7 @@ a:active {
   margin-top: 20px;
 }
 .legend .row-left {
-  width: 70%;
+  width: 60%;
 }
 .legend .row-left p {
   margin: 0px;
@@ -118,7 +239,7 @@ a:active {
 }
 .legend .row-right {
   position: relative;
-  width: 30%;
+  width: 40%;
   bottom: 0;
 }
 .legend .row-right p {
@@ -129,6 +250,10 @@ a:active {
 }
 .mapboxgl-ctrl-group {
   background: #314561;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, .8);
+}
+.mapboxgl-ctrl-group:not(:empty) {
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, .8);
 }
 .mapboxgl-ctrl-group button+button {
   border-top: 1px solid #000;
@@ -170,4 +295,34 @@ a:active {
   margin: 0;
   margin-bottom: 0.2em;
   font-size: 1.5em;
+}
+svg {
+  font: 10px sans-serif;
+}
+text {
+  fill: #a6c1d2;
+}
+.text {
+  fill: #a6c1d2;
+  text-anchor: middle;
+}
+.bar {
+  fill-opacity: 0.9;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #a6c1d2;
+  shape-rendering: crispEdges;
+}
+.brush .extent {
+  fill: #5f6a75;
+  fill-opacity: .3;
+  shape-rendering: crispEdges;
+}
+.resize rect {
+  visibility: visible !important;
+  fill: white;
+  width: 3px;
+  opacity: 80%;
 }
