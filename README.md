@@ -29,6 +29,16 @@ If you want to make a version of Sidewalk Widths for your own city, just fork th
 
 The website should work with only a few changes. I've consolidated most of the variables you need to customize in a file called ```settings.js```. It should include things like your Mapbox token, sidewalk width ratings, and units of measurement for you to customize.
 
+### Virtual environment
+The fastest way to get your vitual environment configured to run the Jupyter Notebook is by using Anaconda to install the following depedencies. In the Anaconda prompt type the following:
+```conda create -n opendata-env -c conda-forge python=3.8 geopandas matplotlib tqdm notebook ipywidgets```
+
+Now activate your virtual environment by typing the following into the Anaconda Prompt and pressing enter.
+```conda activate opendata-env```
+
+Finally, install this last python package by typing the following in the Anaconda Prompt and pressing enter.
+```pip install centerline```
+
 ### Mapbox
 Sidewalk widths uses Mapbox for the custom map style and serve the sidewalk widths data as a tileset. If you're creating your own version of the site you must make a Mapbox account and replace the access token with your own. My access token is restricted to the www.sidewalkwidths.nyc URL.
 
