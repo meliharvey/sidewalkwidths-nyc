@@ -1,6 +1,6 @@
 # Sidewalk Widths NYC
 
-Sidewalk Widths NYC uses [New York City's Sidewalk dataset](https://data.cityofnewyork.us/City-Government/NYC-Planimetric-Database-Sidewalk/vfx9-tbb6) to produce a map of sidewalk widths for the 5 boroughs.
+Sidewalk Widths NYC uses [New York City's 2024 Sidewalk dataset](https://data.cityofnewyork.us/City-Government/NYC-Planimetric-Database-Sidewalk/vfx9-tbb6) to produce a map of sidewalk widths for the 5 boroughs.
 
 This repo contains the notebooks to reproduce this work, as well as the finished Sidewalk Width dataset in GeoJSON format.
 
